@@ -1,0 +1,14 @@
+Desc:
+lnmpp=linux + nginx + mysql + php + postgresql
+
+Detail:
+PHP_VERSION=php-5.4.0
+PG_VERSION=postgresql-9.1.3
+NGINX_VERSION=nginx-1.0.15
+MYSQL_VERSION=mysql-5.5.21
+
+Usage:
+#sh lnmpp.sh
+
+Contact:
+email:i@qzier.com
