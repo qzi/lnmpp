@@ -94,6 +94,20 @@ else
   wget http://downloads.sourceforge.net/project/pcre/pcre/8.21/pcre-8.21.tar.bz2
 fi
 
+if [ -s mcrypt-2.6.8.tar.gz ]; then
+  echo "mcrypt-2.6.8.tar.gz [found]"
+else
+  echo "Error: mcrypt-2.6.8.tar.gz not found!!!download now......"
+  wget http://sourceforge.net/projects/mcrypt/files/latest/download?source=files
+fi
+
+if [ -s mhash-0.9.9.9.tar.bz2 ]; then
+  echo "mhash-0.9.9.9.tar.bz2 [found]"
+else
+  echo "Error: mhash-0.9.9.9.tar.bz2 not found!!!download now......"
+  wget http://sourceforge.net/projects/mhash/files/latest/download?source=files
+fi
+
 if [ -s $PG_VERSION.tar.gz ]; then
   echo "$PG_VERSION.tar.gz [found]"
 else
@@ -228,6 +242,23 @@ make install
 ls $PHP_EXTRA_LIBS/libiconv-1.14/
 cd ../
 
+tar -jxf mhash-0.9.9.9.tar.bz2
+cd mhash-0.9.9.9
+make clean
+./configure --prefix=$PHP_EXTRA_LIBS/mhash-0.9.9.9
+make
+make install
+ls $PHP_EXTRA_LIBS/mhash-0.9.9.9
+cd ../
+
+tar -zxvf mcrypt-2.6.8.tar.gz
+cd mcrypt-2.6.8
+make clean
+./configure --prefix=$PHP_EXTRA_LIBS/mcrypt-2.6.8
+make
+make install
+cd ../
+
 tar -jxf pcre-8.21.tar.bz2
 cd pcre-8.21
 make clean
@@ -241,7 +272,7 @@ tar -zxvf $PHP_VERSION.tar.gz
 cd $PHP_VERSION
 make clean
 
-./configure --prefix=$PHP_ROOT --with-config-file-path=$PHP_ROOT/etc/ --with-iconv=$PHP_EXTRA_LIBS/libiconv-1.14 --with-pcre-dir=$PHP_EXTRA_LIBS/pcre-8.21 --with-pgsql=$PG_ROOT --with-pdo-pgsql=$PG_ROOT --with-mysql=$MYSQL_ROOT --with-pdo-mysql=$MYSQL_ROOT --enable-fpm --with-pear --with-gd --enable-gd-native-ttf --with-freetype --with-zlib --enable-mbstring --with-curl --with-openssl
+./configure --prefix=$PHP_ROOT --with-config-file-path=$PHP_ROOT/etc/ --with-iconv=$PHP_EXTRA_LIBS/libiconv-1.14 --with-pcre-dir=$PHP_EXTRA_LIBS/pcre-8.21 --with-pgsql=$PG_ROOT --with-pdo-pgsql=$PG_ROOT --with-mysql=$MYSQL_ROOT --with-pdo-mysql=$MYSQL_ROOT --enable-fpm --with-pear --with-gd --enable-gd-native-ttf --with-freetype --with-zlib --enable-mbstring --with-curl --with-openssl --with-mhash=$PHP_EXTRA_LIBS/mhash-0.9.9.9 --with-mcrypt=$PHP_EXTRA_LIBS/mcrypt-2.6.8
 make 
 ##make ZEND_EXTRA_LIBS ='-liconv'
 make install
@@ -294,6 +325,9 @@ PGCTL=$PG_ROOT/bin/pg_ctl
 PGUSER=postgres
 PGDATA=$PG_ROOT/data
 PGLOG=$PG_ROOT/logs/pgsql.log
+MYSQL_ROOT=$LNMPP_ROOT/mysql/$MYSQL_VERSION
+MYSQLDAEMON=$LNMPP_ROOT/mysql/$MYSQL_VERSION/bin/mysqld_safe
+
 
 stop()
 {
@@ -327,11 +361,8 @@ stop()
     done
   }
 
-  echo "-------------stop pgsql--------------"
-
   echo "-------------stop mysql--------------"
   killall mysqld
-  echo "-------------mysql stoped--------------"
   sleep 7
 }
 
