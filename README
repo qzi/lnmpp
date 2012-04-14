@@ -9,7 +9,7 @@ MYSQL_VERSION=mysql-5.5.21
 
 Usage:
 #sh lnmpp.sh
-#./lnmpp_start {start|stop|start}
+#./lnmpp_start {start|stop|reload}
 
 Contact:
 email:i@qzier.com
